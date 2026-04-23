@@ -159,56 +159,52 @@ const Game = (() => {
         updateProgress('game-progress-bar', 'progress-val');
     }
 
-        function checkTypingAnswer() {
-            const input = document.getElementById('ans-input');
-            const msg = document.getElementById('msg');
+    function checkTypingAnswer() {
+        const input = document.getElementById('ans-input');
+        const val = input.value.trim().toLowerCase();
+        const msg = document.getElementById('msg');
 
-            // Pokud je pole prázdné, nic neděláme
-            if (!input.value.trim()) return;
+        if (!val) return;
 
-            // TADY PROBÍHÁ TA MAGIE: Normalizujeme vstup od hráče i správnou odpověď
-            const cleanInput = normalizeText(input.value);
-            const cleanCorrect = normalizeText(state.currentAnswer);
+        if (val === state.currentAnswer.toLowerCase()) {
+            const points = state.hintUsed ? 5 : 10;
+            state.score += points;
+            state.correct++;
+            state.streak++;
+            if (state.streak > state.maxStreak) state.maxStreak = state.streak;
 
-            if (cleanInput === cleanCorrect) {
-                const points = state.hintUsed ? 5 : 10;
-                state.score += points;
-                state.correct++;
-                state.streak++;
-                if (state.streak > state.maxStreak) state.maxStreak = state.streak;
-
-                msg.textContent = getRandomCorrectMsg();
-                msg.className = 'message win';
-                input.className = 'input-correct';
-                
-                Audio.correct();
-                if (state.streak > 0 && state.streak % 5 === 0) {
-                    Audio.streak();
-                    showToast(`🔥 ${state.streak}x série!`);
-                }
-                
-                confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
-                document.getElementById('score').textContent = state.score;
-                updateStreakDisplay(state.streak);
-
-                setTimeout(nextTypingQuestion, 800);
-            } else {
-                state.wrong++;
-                state.streak = 0;
-                msg.textContent = 'Zkus to znovu 💪';
-                msg.className = 'message error';
-                input.className = 'input-wrong';
-                
-                Audio.wrong();
-                updateStreakDisplay(0);
-
-                if (state.currentQuestion && !state.wrongAnswers.find(w => w.q === state.currentQuestion.q)) {
-                    state.wrongAnswers.push({ ...state.currentQuestion });
-                }
-
-                setTimeout(() => { input.className = ''; }, 600);
+            msg.textContent = getRandomCorrectMsg();
+            msg.className = 'message win';
+            input.className = 'input-correct';
+            
+            Audio.correct();
+            if (state.streak > 0 && state.streak % 5 === 0) {
+                Audio.streak();
+                showToast(`🔥 ${state.streak}x série!`);
             }
+            
+            confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
+            document.getElementById('score').textContent = state.score;
+            updateStreakDisplay(state.streak);
+
+            setTimeout(nextTypingQuestion, 800);
+        } else {
+            state.wrong++;
+            state.streak = 0;
+            msg.textContent = 'Zkus to znovu 💪';
+            msg.className = 'message error';
+            input.className = 'input-wrong';
+            
+            Audio.wrong();
+            updateStreakDisplay(0);
+
+            if (state.currentQuestion && !state.wrongAnswers.find(w => w.q === state.currentQuestion.q)) {
+                state.wrongAnswers.push({ ...state.currentQuestion });
+            }
+
+            setTimeout(() => { input.className = ''; }, 600);
         }
+    }
 
     function showTypingHint() {
         state.hintUsed = true;
@@ -770,7 +766,38 @@ const Game = (() => {
         const msgs = ['SKVĚLE! 🌟', 'Výborně! ✨', 'Super! 🎉', 'Správně! 💯', 'Přesně tak! 🔥', 'Perfektní! 👏'];
         return msgs[Math.floor(Math.random() * msgs.length)];
     }
+        // Naslouchání na celém okně (window)
+    window.addEventListener('keydown', (e) => {
+        // Kontrola, jestli jsme v režimu psaní a jestli není otevřený třeba učitelský login
+        const inputDisplay = document.getElementById('ans-input');
+        if (!inputDisplay || state.mode !== 'typing' || document.getElementById('login-screen').style.display === 'flex') {
+            return;
+        }
 
+        // 1. Ošetření klávesy Backspace (mazání)
+        if (e.key === 'Backspace') {
+            e.preventDefault();
+            inputDisplay.value = inputDisplay.value.slice(0, -1);
+            Audio.keyPress();
+        }
+        // 2. Ošetření klávesy Enter (odeslání)
+        else if (e.key === 'Enter') {
+            e.preventDefault();
+            checkTypingAnswer();
+        }
+        // 3. Ošetření Mezery
+        else if (e.key === ' ') {
+            e.preventDefault();
+            inputDisplay.value += ' ';
+            Audio.keyPress();
+        }
+        // 4. Psaní písmen a čísel (pouze pokud je klávesa dlouhá 1 znak - ignoruje Shift, Ctrl atd.)
+        else if (e.key.length === 1) {
+            e.preventDefault();
+            inputDisplay.value += e.key;
+            Audio.keyPress();
+        }
+    });
     return {
         setup, getState, 
         checkTypingAnswer, showTypingHint, skipTypingQuestion, nextTypingQuestion,
