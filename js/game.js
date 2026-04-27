@@ -166,7 +166,7 @@ const Game = (() => {
 
         if (!val) return;
 
-        if (val === state.currentAnswer.toLowerCase()) {
+        if (normalizeText(val) === normalizeText(state.currentAnswer)) {
             const points = state.hintUsed ? 5 : 10;
             state.score += points;
             state.correct++;
@@ -600,6 +600,22 @@ const Game = (() => {
             // Full QWERTY + number row keyboard
             const numRow = '1234567890';
             const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+
+            // Czech diacritics row
+            const czechChars = ['á','č','ď','é','ě','í','ň','ó','ř','š','ť','ú','ů','ý','ž'];
+            const czechDiv = document.createElement('div');
+            czechDiv.className = 'keyboard-row keyboard-row-czech';
+            czechChars.forEach(c => {
+                const b = document.createElement('button');
+                b.className = 'key key-czech';
+                b.textContent = c;
+                b.onclick = () => {
+                    document.getElementById('ans-input').value += c;
+                    Audio.keyPress();
+                };
+                czechDiv.appendChild(b);
+            });
+            kb.appendChild(czechDiv);
             
             // Number row
             const numDiv = document.createElement('div');
