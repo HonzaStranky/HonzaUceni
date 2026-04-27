@@ -551,16 +551,18 @@ const Game = (() => {
         });
     }
 
+    // Pomocná proměnná pro stav klávesnice (přidej ji klidně na začátek Game nebo k funkci)
+    let keyboardMode = 'abc'; // 'abc' nebo 'dia'
+
     function createKeyboard() {
         const kb = document.getElementById('keyboard');
         if (!kb) return;
         kb.innerHTML = '';
 
-        // Determine if we need a number keyboard (for math subjects)
         const needsNumKeyboard = (state.subject === 'math');
 
         if (needsNumKeyboard) {
-            // Number keyboard
+            // --- MATEMATICKÁ KLÁVESNICE (Zůstává stejná) ---
             const numRows = [['7','8','9'],['4','5','6'],['1','2','3'],['0','.']];
             numRows.forEach(row => {
                 const rowDiv = document.createElement('div');
@@ -579,7 +581,6 @@ const Game = (() => {
             });
             const bottomRow = document.createElement('div');
             bottomRow.className = 'keyboard-row';
-            
             let del = document.createElement('button');
             del.className = 'key key-num key-del';
             del.textContent = '⌫';
@@ -587,69 +588,71 @@ const Game = (() => {
                 document.getElementById('ans-input').value = document.getElementById('ans-input').value.slice(0, -1);
                 Audio.keyPress();
             };
-            
             let enter = document.createElement('button');
             enter.className = 'key key-num key-enter';
             enter.textContent = '✓ OK';
             enter.onclick = () => checkTypingAnswer();
-
             bottomRow.appendChild(del);
             bottomRow.appendChild(enter);
             kb.appendChild(bottomRow);
+
         } else {
-            // Full QWERTY + number row keyboard
-            const numRow = '1234567890';
-            const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
-
-            // Czech diacritics row
-            const czechChars = ['á','č','ď','é','ě','í','ň','ó','ř','š','ť','ú','ů','ý','ž'];
-            const czechDiv = document.createElement('div');
-            czechDiv.className = 'keyboard-row keyboard-row-czech';
-            czechChars.forEach(c => {
-                const b = document.createElement('button');
-                b.className = 'key key-czech';
-                b.textContent = c;
-                b.onclick = () => {
-                    document.getElementById('ans-input').value += c;
-                    Audio.keyPress();
-                };
-                czechDiv.appendChild(b);
-            });
-            kb.appendChild(czechDiv);
-            
-            // Number row
-            const numDiv = document.createElement('div');
-            numDiv.className = 'keyboard-row';
-            numRow.split('').forEach(n => {
-                const b = document.createElement('button');
-                b.className = 'key key-sm';
-                b.textContent = n;
-                b.onclick = () => {
-                    document.getElementById('ans-input').value += n;
-                    Audio.keyPress();
-                };
-                numDiv.appendChild(b);
-            });
-            kb.appendChild(numDiv);
-
-            rows.forEach(row => {
-                const rowDiv = document.createElement('div');
-                rowDiv.className = 'keyboard-row';
-                row.split('').forEach(l => {
-                    const b = document.createElement('button');
-                    b.className = 'key';
-                    b.textContent = l;
-                    b.onclick = () => {
-                        document.getElementById('ans-input').value += l;
-                        Audio.keyPress();
-                    };
-                    rowDiv.appendChild(b);
+            // --- UNIVERZÁLNÍ KLÁVESNICE S PŘEPÍNAČEM ---
+            if (keyboardMode === 'dia') {
+                // REŽIM: ČÍSLA A DIAKRITIKA
+                const rows = [
+                    '1234567890',
+                    'ěščřžýáíé',
+                    'ďťňóúů'
+                ];
+                rows.forEach(row => {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'keyboard-row';
+                    row.split('').forEach(char => {
+                        const b = document.createElement('button');
+                        b.className = 'key key-dia';
+                        b.textContent = char;
+                        b.onclick = () => {
+                            document.getElementById('ans-input').value += char;
+                            Audio.keyPress();
+                        };
+                        rowDiv.appendChild(b);
+                    });
+                    kb.appendChild(rowDiv);
                 });
-                kb.appendChild(rowDiv);
-            });
-            // Bottom row
+            } else {
+                // REŽIM: KLASICKÉ ABC
+                const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+                rows.forEach(row => {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'keyboard-row';
+                    row.split('').forEach(l => {
+                        const b = document.createElement('button');
+                        b.className = 'key';
+                        b.textContent = l;
+                        b.onclick = () => {
+                            document.getElementById('ans-input').value += l;
+                            Audio.keyPress();
+                        };
+                        rowDiv.appendChild(b);
+                    });
+                    kb.appendChild(rowDiv);
+                });
+            }
+
+            // SPOLEČNÝ SPODNÍ ŘÁDEK PRO ABC I DIA
             const bottomRow = document.createElement('div');
             bottomRow.className = 'keyboard-row';
+
+            // Tlačítko pro přepínání režimů
+            let toggle = document.createElement('button');
+            toggle.className = 'key key-toggle';
+            toggle.textContent = keyboardMode === 'abc' ? '?123' : 'ABC';
+            toggle.onclick = () => {
+                keyboardMode = (keyboardMode === 'abc' ? 'dia' : 'abc');
+                Audio.keyPress();
+                createKeyboard(); // Překreslíme klávesnici
+            };
 
             let del = document.createElement('button');
             del.className = 'key key-del';
@@ -672,8 +675,9 @@ const Game = (() => {
             enter.textContent = '✓ OK';
             enter.onclick = () => checkTypingAnswer();
 
-            bottomRow.appendChild(del);
+            bottomRow.appendChild(toggle);
             bottomRow.appendChild(space);
+            bottomRow.appendChild(del);
             bottomRow.appendChild(enter);
             kb.appendChild(bottomRow);
         }
