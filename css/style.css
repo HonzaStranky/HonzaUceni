@@ -80,7 +80,12 @@ body {
 
 .top-bar-left { display: flex; align-items: center; gap: 10px; }
 .top-bar-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-
+.key-toggle {
+    background: var(--warning) !important; /* Nebo jiná barva, co vynikne */
+    color: white;
+    font-weight: bold;
+    min-width: 60px;
+}
 .logo-text {
     font-family: 'Fredoka One', cursive;
     font-size: 1.3rem;
