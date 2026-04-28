@@ -12,6 +12,9 @@
 </head>
 <body>
 
+    <!-- ============ COPYRIGHT BAR ============ -->
+    <div id="copyright-bar">🎓 HonzaUceni &nbsp;·&nbsp; Všechna Práva Vyhrazena &nbsp;·&nbsp; © 2026 HonzaUceni.cz</div>
+
     <!-- ============ TOP BAR ============ -->
     <header id="top-bar">
         <div class="top-bar-left">
@@ -96,24 +99,57 @@
             <div id="achievements-mini" class="achievements-mini-grid"></div>
         </section>
 
-        <button id="teacher-login-btn" onclick="showScreen('login-screen')">🔐</button>
+        <button id="teacher-login-btn" onclick="showScreen('login-screen')" title="Přihlášení učitele"><i class="fas fa-chalkboard-teacher"></i> <span id="teacher-btn-label">Login</span></button>
     </main>
 
     <!-- ============ LOGIN SCREEN ============ -->
     <div id="login-screen" class="screen">
         <button class="back-btn" onclick="showScreen('main-menu')"><i class="fas fa-arrow-left"></i> Zpět</button>
-        <h1 class="screen-title">Teacher Login 👨‍🏫</h1>
-        <div class="game-container">
-            <div class="input-group">
-                <label>Jméno</label>
-                <input id="login-name" placeholder="Zadej jméno">
+        <h1 class="screen-title">Přihlášení učitele 👨‍🏫</h1>
+        <div class="game-container login-container">
+            <div class="login-avatar">👨‍🏫</div>
+            <div class="login-email-preview" id="login-email-preview">
+                <span class="email-user" id="email-user-display">?</span><span class="email-domain">@honzauceni.fake.cz</span>
             </div>
             <div class="input-group">
-                <label>Heslo</label>
+                <label><i class="fas fa-user"></i> Uživatelské jméno</label>
+                <input id="login-name" placeholder="Zadej jméno učitele" oninput="updateEmailPreview(this.value)" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-lock"></i> Heslo</label>
                 <input id="login-pass" type="password" placeholder="Zadej heslo">
             </div>
-            <button class="btn-primary" onclick="login()"><i class="fas fa-sign-in-alt"></i> Přihlásit</button>
+            <div class="login-hint">🔑 Přihlašuješ se jako: <span id="login-email-full">?@honzauceni.fake.cz</span></div>
+            <button class="btn-primary" onclick="login()"><i class="fas fa-sign-in-alt"></i> Přihlásit se</button>
             <div id="login-msg" class="message"></div>
+            <div id="login-logged-in-bar" style="display:none;">
+                <span id="login-current-user-text"></span>
+                <button class="btn-secondary btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Odhlásit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ IMPORT/EXPORT SCREEN ============ -->
+    <div id="share-screen" class="screen">
+        <button class="back-btn" onclick="showScreen('topics-screen')"><i class="fas fa-arrow-left"></i> Zpět</button>
+        <h1 class="screen-title">Sdílet kurz 🔗</h1>
+        <div class="game-container">
+            <div id="share-export-section">
+                <h3><i class="fas fa-upload"></i> Exportovat kurz</h3>
+                <p class="share-desc">Sdílej svůj kurz s ostatními pomocí kódu.</p>
+                <div id="export-list" class="sub-list"></div>
+            </div>
+            <hr class="share-divider">
+            <div id="share-import-section">
+                <h3><i class="fas fa-download"></i> Importovat kurz kódem</h3>
+                <p class="share-desc">Zadej kód kurzu od učitele pro přidání cvičení.</p>
+                <div class="input-group">
+                    <label>Kód kurzu</label>
+                    <input id="import-code-input" placeholder="Např. 5ag7exg" maxlength="10" style="text-transform:lowercase;letter-spacing:2px;">
+                </div>
+                <button class="btn-primary" onclick="importCourse()"><i class="fas fa-download"></i> Importovat</button>
+                <div id="import-msg" class="message"></div>
+            </div>
         </div>
     </div>
 
@@ -132,8 +168,12 @@
         <h1 id="topics-title" class="screen-title">Témata</h1>
         <div id="topic-list" class="sub-list"></div>
         <div id="my-exercises-section" style="display:none;">
-            <div class="section-header"><i class="fas fa-star"></i> Moje Cvičení</div>
+            <div class="section-header"><i class="fas fa-star"></i> Moje Cvičení <button class="btn-share-small" onclick="openShareScreen()"><i class="fas fa-share-alt"></i> Sdílet / Importovat</button></div>
             <div id="my-exercises-list" class="sub-list"></div>
+        </div>
+        <div id="imported-exercises-section" style="display:none;">
+            <div class="section-header section-header-import"><i class="fas fa-download"></i> Importovaná Cvičení</div>
+            <div id="imported-exercises-list" class="sub-list"></div>
         </div>
     </div>
 
