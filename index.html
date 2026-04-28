@@ -101,27 +101,25 @@
 
         <button id="teacher-login-btn" onclick="showScreen('login-screen')" title="Přihlášení učitele"><i class="fas fa-chalkboard-teacher"></i> <span id="teacher-btn-label">Login</span></button>
     </main>
-
-<div id="login-screen" class="screen">
+        
+    <div id="login-screen" class="screen">
         <button class="back-btn" onclick="showScreen('main-menu')"><i class="fas fa-arrow-left"></i> Zpět</button>
         
-        <div class="game-container login-container" style="margin-top: 50px;">
-            
+        <div class="game-container login-container">
             <div class="input-group">
-                <input id="login-name" placeholder="Uživatelské jméno" autocomplete="off" style="text-align: center; font-size: 1.2rem;">
+                <input id="login-name" placeholder="Uživatelské jméno" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <input id="login-pass" type="password" placeholder="Heslo">
             </div>
             
-            <div class="input-group">
-                <input id="login-pass" type="password" placeholder="Heslo" style="text-align: center; font-size: 1.2rem;">
-            </div>
-            
-            <button class="btn-primary" onclick="login()" style="width: 100%;"><i class="fas fa-sign-in-alt"></i> Vstoupit</button>
+            <button class="btn-primary" onclick="login()"><i class="fas fa-sign-in-alt"></i> Vstoupit</button>
             
             <div id="login-msg" class="message"></div>
-            
-            <div id="login-logged-in-bar" style="display:none; margin-top: 20px;">
+        
+            <div id="login-logged-in-bar" style="display:none; margin-top: 15px; font-size: 0.9rem; color: var(--text-dim);">
                 <span id="login-current-user-text"></span>
-                <button class="btn-secondary btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Odhlásit</button>
+                <button class="btn-secondary btn-sm" onclick="logout()" style="margin-left: 10px;">Odhlásit</button>
             </div>
         </div>
     </div>
