@@ -27,7 +27,7 @@ function updateTeacherUI() {
         if (label) label.textContent = loggedInTeacher;
         if (btn) btn.classList.add('teacher-logged-in');
         if (bar) bar.style.display = 'flex';
-        if (userText) userText.textContent = '✅ Přihlášen jako ' + loggedInTeacher + '@';
+        if (userText) userText.textContent = '✅ Přihlášen jako ' + loggedInTeacher + '';
     } else {
         if (label) label.textContent = 'Login';
         if (btn) btn.classList.remove('teacher-logged-in');
