@@ -518,5 +518,13 @@ function init() {
     Stats.renderRecentActivity();
     Achievements.renderMini('achievements-mini');
 }
-
+function logout() {
+    isTeacher = false;
+    document.getElementById('login-name').value = '';
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-msg').textContent = '';
+    document.getElementById('login-logged-in-bar').style.display = 'none';
+    showToast("Byl jsi odhlášen.");
+    goHome();
+}
 init();
