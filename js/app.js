@@ -11,6 +11,16 @@ let pendingSubject = '';
 let pendingTopic = '';
 
 // ===== SCREEN MANAGEMENT =====
+function openFullscreen() {
+    const elem = document.documentElement; // Celá stránka
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* Safari */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE11 */
+        elem.msRequestFullscreen();
+    }
+}
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
     const screen = document.getElementById(id);
