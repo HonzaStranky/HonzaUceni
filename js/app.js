@@ -226,17 +226,30 @@ function toggleSound() { Audio.toggle(); }
 function login() {
     const name = document.getElementById('login-name').value.trim();
     const pass = document.getElementById('login-pass').value;
-    if (name === 'Honza' && pass === 'Honza98') {
+
+    // Seznam povolených učitelů (jméno: heslo)
+    const teachers = {
+        'Honza': 'Honza98',
+        'Simona': 'Simona421',
+        'Buhrym': 'Buhrym81',
+        'UniversalTeacher': 'aeg8164'
+    };
+
+    // Kontrola, jestli jméno existuje v seznamu a jestli sedí heslo
+    if (teachers[name] && teachers[name] === pass) {
         isTeacher = true;
         loggedInTeacher = name;
         localStorage.setItem('honza_teacher_session', name);
-        document.getElementById('login-msg').textContent = `✅ Vítej, ${name}@honzauceni.fake.cz!`;
+        
+        // Zobrazení čistého "Vítej, Jméno"
+        document.getElementById('login-msg').textContent = `✅ Vítej, ${name}`;
         document.getElementById('login-msg').className = 'message win';
+        
         Audio.correct();
         updateTeacherUI();
         setTimeout(() => showScreen('main-menu'), 1000);
     } else {
-        document.getElementById('login-msg').textContent = 'Chybné přihlašovací údaje ❌';
+        document.getElementById('login-msg').textContent = 'Chybné údaje ❌';
         document.getElementById('login-msg').className = 'message error';
         Audio.wrong();
     }
