@@ -15,7 +15,7 @@ let pendingTopic = '';
 function updateEmailPreview(val) {
     const clean = val.trim().toLowerCase().replace(/\s+/g, '_') || '?';
     document.getElementById('email-user-display').textContent = clean;
-    document.getElementById('login-email-full').textContent = clean + '@honzauceni.fake.cz';
+    document.getElementById('login-email-full').textContent = clean + '';
 }
 
 function updateTeacherUI() {
@@ -27,7 +27,7 @@ function updateTeacherUI() {
         if (label) label.textContent = loggedInTeacher;
         if (btn) btn.classList.add('teacher-logged-in');
         if (bar) bar.style.display = 'flex';
-        if (userText) userText.textContent = '✅ Přihlášen jako ' + loggedInTeacher + '@honzauceni.fake.cz';
+        if (userText) userText.textContent = '✅ Přihlášen jako ' + loggedInTeacher + '@';
     } else {
         if (label) label.textContent = 'Login';
         if (btn) btn.classList.remove('teacher-logged-in');
