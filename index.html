@@ -102,33 +102,29 @@
         <button id="teacher-login-btn" onclick="showScreen('login-screen')" title="Přihlášení učitele"><i class="fas fa-chalkboard-teacher"></i> <span id="teacher-btn-label">Login</span></button>
     </main>
 
-    <!-- ============ LOGIN SCREEN ============ -->
-    <div id="login-screen" class="screen">
+<div id="login-screen" class="screen">
         <button class="back-btn" onclick="showScreen('main-menu')"><i class="fas fa-arrow-left"></i> Zpět</button>
-        <h1 class="screen-title">Přihlášení učitele 👨‍🏫</h1>
-        <div class="game-container login-container">
-            <div class="login-avatar">👨‍🏫</div>
-            <div class="login-email-preview" id="login-email-preview">
-                <span class="email-user" id="email-user-display">?</span><span class="email-domain"></span>
-            </div>
+        
+        <div class="game-container login-container" style="margin-top: 50px;">
+            
             <div class="input-group">
-                <label><i class="fas fa-user"></i> Uživatelské jméno</label>
-                <input id="login-name" placeholder="Zadej jméno učitele" oninput="updateEmailPreview(this.value)" autocomplete="off">
+                <input id="login-name" placeholder="Uživatelské jméno" autocomplete="off" style="text-align: center; font-size: 1.2rem;">
             </div>
+            
             <div class="input-group">
-                <label><i class="fas fa-lock"></i> Heslo</label>
-                <input id="login-pass" type="password" placeholder="Zadej heslo">
+                <input id="login-pass" type="password" placeholder="Heslo" style="text-align: center; font-size: 1.2rem;">
             </div>
-            <div class="login-hint">🔑 Přihlašuješ se jako: <span id="login-email-full">?</span></div>
-            <button class="btn-primary" onclick="login()"><i class="fas fa-sign-in-alt"></i> Přihlásit se</button>
+            
+            <button class="btn-primary" onclick="login()" style="width: 100%;"><i class="fas fa-sign-in-alt"></i> Vstoupit</button>
+            
             <div id="login-msg" class="message"></div>
-            <div id="login-logged-in-bar" style="display:none;">
+            
+            <div id="login-logged-in-bar" style="display:none; margin-top: 20px;">
                 <span id="login-current-user-text"></span>
                 <button class="btn-secondary btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Odhlásit</button>
             </div>
         </div>
     </div>
-
     <!-- ============ IMPORT/EXPORT SCREEN ============ -->
     <div id="share-screen" class="screen">
         <button class="back-btn" onclick="showScreen('topics-screen')"><i class="fas fa-arrow-left"></i> Zpět</button>
